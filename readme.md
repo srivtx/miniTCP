@@ -1,75 +1,44 @@
+<p align="center">
+  <img src="logo.png" width="100" alt="miniTCP logo" />
+</p>
 
+<h1 align="center">miniTCP</h1>
 
-
-
-
-<table>
-<tr>
-<td valign="middle"><img src="logo.png" width="50"></td>
-<td valign="middle"><h1>miniTCP</h1></td>
-</tr>
-</table>
-
-
-
-
-
-This project is a small experiment to understand how some TCP ideas can be recreated on top of UDP.
-It doesn’t aim to be a real protocol—just a simple learning tool to see how things like handshakes, sequence numbers, ACKs, and basic reliability work behind the scenes.
-
-There are two main files:
-
-* **toy_tcp_receiver.py** – behaves like a server
-* **toy_tcp_sender.py** – behaves like a client
-
-Both sides talk using UDP sockets, and the logic we add on top is what makes it feel “TCP-like.”
+<p align="center"><em>A minimal, reliable transport built on top of UDP — for learning and prototyping.</em></p>
 
 ---
 
-## How It Works
+## What this is
 
-**1. Handshake**
-Before sending any data, the sender and receiver go through a short 3-step handshake (SYN → SYN-ACK → ACK).
-This sets up the initial sequence numbers and tells both sides that the connection is ready.
+miniTCP is a compact, educational implementation of a TCP-like reliable transport implemented over plain UDP sockets.  
+It demonstrates the core ideas behind TCP — connection handshake, sequence numbers, ACKs, retransmission and reassembly — in a short, readable Python codebase.
 
-**2. Data + Sequence Numbers**
-Every packet carries a `seq` value saying “this data belongs here.”
-The receiver keeps an `expected_seq` value so it knows which packet should come next.
-
-**3. ACKs**
-For each data packet, the receiver replies with an ACK number indicating how much data it has received so far.
-
-**4. Retransmission**
-If the sender does not receive an ACK within a timeout, it resends the same packet.
-
-**5. Out-of-Order Handling**
-UDP doesn’t guarantee order, so the receiver stores out-of-order packets in a small buffer and delivers them once the missing piece arrives.
+> This is a learning tool, not a production protocol.
 
 ---
 
-## Running the Demo
+## Files
 
-Start the receiver:
+- `toy_tcp_sender.py` — client (sends data)
+- `toy_tcp_receiver.py` — server (receives, reorders, ACKs)
+- `README.md` — this file
 
-```
+---
+
+## Key ideas (TL;DR)
+
+- **Handshake**: SYN → SYN-ACK → ACK to establish initial sequence numbers.  
+- **Sequence numbers**: byte-based offsets to place packets in the stream.  
+- **ACKs**: receiver sends back the next expected byte (cumulative ACK).  
+- **Retransmit**: sender resends when ACK times out.  
+- **Reassembly buffer**: receiver stores out-of-order packets and delivers them in order.
+
+---
+
+## Run the demo
+
+Open two terminals.
+
+**1. Start the receiver**
+```bash
 python3 toy_tcp_receiver.py
-```
-
-Then start the sender in another terminal:
-
-```
-python3 toy_tcp_sender.py
-```
-
-You’ll see the handshake happen, data being sent, ACKs being printed, and the receiver delivering everything in the correct order.
-
----
-
-## Why This Project Exists
-
-Writing a tiny reliable protocol on top of UDP is a good way to understand the core concepts behind TCP.
-This project keeps things small and readable so you can follow what’s happening step by step without getting lost in real TCP’s complexity.
-
----
-
-
