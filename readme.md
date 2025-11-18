@@ -3,11 +3,14 @@
 
 
 
-<h1 style="display: flex; align-items: center; gap: 12px;">
-  
-  <img src="logo.png" width="60" />
-  miniTCP
-</h1>
+<table>
+<tr>
+<td valign="middle"><img src="logo.png" width="50"></td>
+<td valign="middle"><h1>miniTCP</h1></td>
+</tr>
+</table>
+
+
 
 
 
